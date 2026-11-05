@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e1724" />
+      <stop offset="100%" stop-color="#06090e" />
+    </linearGradient>
+    <linearGradient id="blueG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00a0f0" />
+      <stop offset="100%" stop-color="#005691" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#bg)" />
+  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#blueG)" stroke-width="24" />
+  <line x1="330" y1="182" x2="420" y2="92" stroke="#00a0f0" stroke-width="24" stroke-linecap="round" />
+  <polygon points="420,92 370,92 420,142" fill="#00a0f0" />
+  <text x="256" y="295" font-family="-apple-system, sans-serif" font-size="110" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4">VOLVO</text>
+  <text x="256" y="340" font-family="-apple-system, sans-serif" font-size="34" font-weight="800" fill="#00e676" text-anchor="middle" letter-spacing="3">VIDA P3</text>
+</svg>

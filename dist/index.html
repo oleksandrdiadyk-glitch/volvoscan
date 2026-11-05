@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0077c8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>VolvoScan P3 — VIDA Диагностика XC70 3.2 AWD</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icon-192.svg">
+  <link rel="apple-touch-icon" href="icon-192.svg">
+  <script type="module" crossorigin src="./assets/index-B_Ps_Toe.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-_WgoEkAu.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Top Sticky Header -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand-badge">
+          <div class="volvo-iron-mark">V</div>
+          <div class="title-wrap">
+            <h1>VolvoScan P3</h1>
+            <div class="vin-subtitle" id="vin-label">XC70 3.2 AWD • YV4BZ982581009482</div>
+          </div>
+        </div>
+        <div class="header-status">
+          <div class="battery-pill" id="battery-val" title="Напряжение бортсети">12.4V</div>
+          <div class="conn-pill offline" id="conn-pill" title="Статус адаптера OBD2">⚪ Офлайн</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tab Bar -->
+      <nav class="tab-bar">
+        <button class="tab-btn active" data-tab="tab-diag" id="btn-tab-diag">
+          <span>🩺</span> Ошибки
+        </button>
+        <button class="tab-btn" data-tab="tab-service" id="btn-tab-service">
+          <span>⚙️</span> Сервис
+        </button>
+        <button class="tab-btn" data-tab="tab-live" id="btn-tab-live">
+          <span>📊</span> Датчики
+        </button>
+        <button class="tab-btn" data-tab="tab-conn" id="btn-tab-conn">
+          <span>🔌</span> Адаптер
+        </button>
+      </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+      <!-- ================= TAB 1: DIAGNOSTICS ================= -->
+      <section class="tab-view active" id="tab-diag">
+        <div class="card scan-hero">
+          <button class="btn-big-scan" id="btn-start-scan">
+            <span>🔍</span> Сканировать все блоки (10 ЭБУ)
+          </button>
+          <div class="scan-progress-wrap" id="scan-progress-wrap">
+            <div class="scan-progress-bar-bg">
+              <div class="scan-progress-bar" id="scan-bar"></div>
+            </div>
+            <div class="scan-status-text" id="scan-status-text">Опрос шины CAN...</div>
+          </div>
+        </div>
+
+        <div class="card" id="card-dtc-container">
+          <div class="card-title-row">
+            <span class="card-title"><span>📋</span> Результаты сканирования (VIDA)</span>
+            <span class="badge-tag" id="dtc-count-badge">Ошибок: 0</span>
+          </div>
+
+          <div class="dtc-list" id="dtc-list">
+            <div style="text-align: center; color: var(--text-dim); padding: 20px 0; font-size: 13px;">
+              Нажмите «Сканировать все блоки» для глубокого опроса блоков управления
+            </div>
+          </div>
+
+          <button class="btn-clear-dtc" id="btn-clear-dtc" style="display: none;">
+            <span>🗑️</span> Стереть все коды неисправностей (DTC)
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: SERVICE FUNCTIONS ================= -->
+      <section class="tab-view" id="tab-service">
+        <div class="service-grid">
+
+          <!-- 1. Electronic Parking Brake (EPB) -->
+          <div class="service-card">
+            <div class="service-header">
+              <span class="service-icon">🅿️</span>
+              <div class="service-meta">
+                <h3>Электронный ручник (EPB)</h3>
+                <p>Сервисный режим суппортов для замены задних колодок</p>
+              </div>
+            </div>
+            <div class="service-btn-row">
+              <button class="btn-service warning" id="btn-epb-open">
+                <span>🔓</span> Развести колодки
+              </button>
+              <button class="btn-service primary" id="btn-epb-close">
+                <span>🔒</span> Свести и откалибровать
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Aisin TF-80SC Transmission Level & Temp -->
+          <div class="service-card">
+            <div class="service-header">
+              <span class="service-icon">🛢️</span>
+              <div class="service-meta">
+                <h3>АКПП Aisin TF-80SC (Температура масла)</h3>
+                <p>Контроль уровня масла через переливную пробку (норма: 50–60°C)</p>
+              </div>
+            </div>
+
+            <div class="atf-gauge-box">
+              <div class="atf-temp-row">
+                <span style="font-size: 13px; font-weight: 700; color: var(--text-sub);">Температура ATF:</span>
+                <span class="atf-temp-big" id="service-atf-temp">56.5 °C</span>
+              </div>
+              <div class="atf-zone-hint">
+                🟢 Идеально для проверки уровня (диапазон 50°C – 60°C)
+              </div>
+            </div>
+
+            <div class="service-btn-row">
+              <button class="btn-service" id="btn-reset-atf">
+                <span>🔄</span> Сбросить счетчик деградации масла
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Service Reminder Reset (SRI) -->
+          <div class="service-card">
+            <div class="service-header">
+              <span class="service-icon">🔧</span>
+              <div class="service-meta">
+                <h3>Межсервисный интервал (ТО)</h3>
+                <p>Сброс сообщения «Срок регулярного обслуживания»</p>
+              </div>
+            </div>
+            <div class="service-btn-row">
+              <button class="btn-service primary" id="btn-reset-sri">
+                <span>✅</span> Сбросить напоминание ТО (15 000 км)
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Real Odometer Verification -->
+          <div class="service-card">
+            <div class="service-header">
+              <span class="service-icon">🚗</span>
+              <div class="service-meta">
+                <h3>Проверка реального пробега</h3>
+                <p>Сверка данных одометра из независимых блоков авто</p>
+              </div>
+            </div>
+            <div class="odo-compare-row">
+              <div class="odo-box">
+                <div class="odo-label">Приборка (DIM)</div>
+                <div class="odo-val" id="odo-dim">218 450 км</div>
+              </div>
+              <div class="odo-box">
+                <div class="odo-label">Модуль CEM</div>
+                <div class="odo-val" id="odo-cem">218 450 км</div>
+              </div>
+              <div class="odo-box">
+                <div class="odo-label">Коробка (TCM)</div>
+                <div class="odo-val" id="odo-tcm">218 450 км</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: LIVE SENSORS ================= -->
+      <section class="tab-view" id="tab-live">
+        
+        <!-- Engine B6324S Live Data -->
+        <div class="card">
+          <div class="card-title-row">
+            <span class="card-title"><span>⚡</span> Двигатель 3.2L (B6324S)</span>
+            <span class="badge-tag">ECM</span>
+          </div>
+          <div class="live-grid">
+            <div class="live-item">
+              <span class="live-label">Обороты мотора</span>
+              <div><span class="live-val" id="live-rpm">680</span><span class="live-unit">об/мин</span></div>
+            </div>
+            <div class="live-item">
+              <span class="live-label">Охлаждающая жидкость</span>
+              <div><span class="live-val" id="live-coolant">89.2</span><span class="live-unit">°C</span></div>
+            </div>
+            <div class="live-item">
+              <span class="live-label">Давление в рампе</span>
+              <div><span class="live-val" id="live-fuel-press">3.8</span><span class="live-unit">бар</span></div>
+            </div>
+            <div class="live-item">
+              <span class="live-label">Коррекция смеси LTFT</span>
+              <div><span class="live-val" id="live-ltft">-0.8</span><span class="live-unit">%</span></div>
+            </div>
+          </div>
+
+          <!-- 6-Cylinder Misfire Counters -->
+          <div style="margin-top: 14px;">
+            <span class="live-label">Пропуски зажигания по цилиндрам (1..6):</span>
+            <div class="cylinder-grid">
+              <div class="cyl-box"><div class="cyl-num">Ц1</div><div class="cyl-count" id="cyl-1">0</div></div>
+              <div class="cyl-box"><div class="cyl-num">Ц2</div><div class="cyl-count" id="cyl-2" style="color: var(--amber);">2</div></div>
+              <div class="cyl-box"><div class="cyl-num">Ц3</div><div class="cyl-count" id="cyl-3">0</div></div>
+              <div class="cyl-box"><div class="cyl-num">Ц4</div><div class="cyl-count" id="cyl-4">0</div></div>
+              <div class="cyl-box"><div class="cyl-num">Ц5</div><div class="cyl-count" id="cyl-5">0</div></div>
+              <div class="cyl-box"><div class="cyl-num">Ц6</div><div class="cyl-count" id="cyl-6">0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transmission TF-80SC & Haldex 4 -->
+        <div class="card">
+          <div class="card-title-row">
+            <span class="card-title"><span>⚙️</span> Трансмиссия & Полный привод</span>
+            <span class="badge-tag">TCM / DEM</span>
+          </div>
+          <div class="live-grid">
+            <div class="live-item">
+              <span class="live-label">Масло АКПП (TF-80SC)</span>
+              <div><span class="live-val" id="live-atf-temp">56.5</span><span class="live-unit">°C</span></div>
+            </div>
+            <div class="live-item">
+              <span class="live-label">Передача Geartronic</span>
+              <div><span class="live-val" id="live-gear">P</span></div>
+            </div>
+            <div class="live-item">
+              <span class="live-label">Ток насоса Haldex 4</span>
+              <div><span class="live-val" id="live-haldex-cur">850</span><span class="live-unit">мА</span></div>
+            </div>
+            <div class="live-item">
+              <span class="live-label">Давление муфты Haldex</span>
+              <div><span class="live-val" id="live-haldex-press">4.2</span><span class="live-unit">бар</span></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 4: CONNECTION ================= -->
+      <section class="tab-view" id="tab-conn">
+        <div class="conn-options">
+
+          <div class="conn-card-btn" id="btn-conn-bluetooth">
+            <div class="conn-card-icon">📡</div>
+            <div class="conn-card-text">
+              <h3>Bluetooth OBD2 адаптер</h3>
+              <p>vLinker MC+, OBDLink MX+, ELM327 v1.5 (чип PIC18F25K80)</p>
+            </div>
+          </div>
+
+          <div class="conn-card-btn" id="btn-conn-usb">
+            <div class="conn-card-icon">🔌</div>
+            <div class="conn-card-text">
+              <h3>USB OTG Кабель</h3>
+              <p>vLinker FS, OBDLink EX, FTDI адаптеры через переходник Type-C</p>
+            </div>
+          </div>
+
+          <div class="conn-card-btn" id="btn-conn-demo">
+            <div class="conn-card-icon">🎮</div>
+            <div class="conn-card-text">
+              <h3>Демо-режим (Симуляция XC70 3.2)</h3>
+              <p>Проверка работы всех функций без подключения к реальной машине</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card" style="margin-top: 10px;">
+          <div class="card-title-row">
+            <span class="card-title">ℹ️ Информация об автомобиле</span>
+          </div>
+          <div style="font-size: 13px; color: var(--text-sub); line-height: 1.6;">
+            <strong>Платформа:</strong> Volvo P3 (EUCD)<br>
+            <strong>Двигатель:</strong> 3.2L 6-cyl бензин (B6324S, 235 л.с.)<br>
+            <strong>АКПП:</strong> 6-ст. Aisin Warner TF-80SC Geartronic<br>
+            <strong>Полный привод:</strong> Haldex Generation 4 AWD<br>
+            <strong>Диагностика:</strong> UDS / ISO 15765-4 (500 kbps HS-CAN)
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Global Toast Notification -->
+    <div class="toast" id="toast">Уведомление</div>
+  </div>
+
+</body>
+</html>
