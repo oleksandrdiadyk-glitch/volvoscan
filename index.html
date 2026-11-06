@@ -250,6 +250,31 @@
       <section class="tab-view" id="tab-conn">
         <div class="conn-options">
 
+          <!-- Native Android Bluetooth Card (SPP / Classic ELM327) -->
+          <div class="card" id="native-bt-card" style="display: none; border-color: var(--volvo-blue); background: rgba(0, 119, 200, 0.08); margin-bottom: 12px;">
+            <div class="card-title-row">
+              <span class="card-title">📡 Подключение ELM327 (Bluetooth)</span>
+              <span class="conn-pill" id="native-bt-pill" style="font-size: 11px;">Готов к поиску</span>
+            </div>
+            <div style="margin-top: 10px;">
+              <label style="font-size: 12px; color: var(--text-sub); display: block; margin-bottom: 6px;">Выберите спаренный адаптер из списка:</label>
+              <select id="native-bt-select" style="width: 100%; padding: 12px; border-radius: 8px; background: #070d14; color: #fff; border: 1px solid var(--border-color); font-size: 14px; outline: none;">
+                <option value="">-- Нажмите «Обновить список» --</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+              <button class="btn-service" id="btn-refresh-paired" style="flex: 1; padding: 10px;">
+                <span>🔄</span> Обновить
+              </button>
+              <button class="btn-service primary" id="btn-connect-native" style="flex: 2; padding: 10px;">
+                <span>⚡</span> Подключиться к OBD2
+              </button>
+            </div>
+            <div id="native-bt-tip" style="font-size: 12px; color: var(--text-sub); margin-top: 8px; line-height: 1.4;">
+              💡 <em>Адаптер должен быть вставлен в OBD2 авто (зажигание в II) и предварительно спарен в Bluetooth телефона (PIN 1234).</em>
+            </div>
+          </div>
+
           <div class="conn-card-btn" id="btn-conn-bluetooth">
             <div class="conn-card-icon">📡</div>
             <div class="conn-card-text">

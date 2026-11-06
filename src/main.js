@@ -199,6 +199,66 @@ document.getElementById('conn-pill').onclick = () => {
   document.getElementById('btn-tab-conn').click();
 };
 
+// --- Native Android APK Bridge Integration ---
+function initNativeBridge() {
+  if (engine.isNativeAndroidAvailable()) {
+    const card = document.getElementById('native-bt-card');
+    if (card) card.style.display = 'block';
+    refreshNativeDeviceList();
+  }
+}
+
+function refreshNativeDeviceList() {
+  const select = document.getElementById('native-bt-select');
+  if (!select) return;
+  select.innerHTML = '';
+
+  try {
+    const devices = engine.getNativePairedDevices();
+    if (!devices || devices.length === 0) {
+      select.innerHTML = '<option value="">(Нет спаренных устройств. Спарьте в Bluetooth телефона)</option>';
+      return;
+    }
+
+    devices.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d.address;
+      opt.textContent = `${d.name} [${d.address}]`;
+      select.appendChild(opt);
+    });
+  } catch (err) {
+    showToast(`Ошибка: ${err.message}`);
+  }
+}
+
+document.getElementById('btn-refresh-paired').onclick = () => {
+  refreshNativeDeviceList();
+  showToast('Список Bluetooth устройств обновлен');
+};
+
+document.getElementById('btn-connect-native').onclick = async () => {
+  const select = document.getElementById('native-bt-select');
+  const mac = select ? select.value : '';
+  if (!mac) {
+    showToast('Выберите адаптер из списка');
+    return;
+  }
+  showToast('Подключение к ELM327...');
+  try {
+    const res = await engine.connectNativeBluetooth(mac);
+    showToast(`Успешно подключено: ${res.name}`, 4000);
+    document.getElementById('btn-tab-diag').click();
+  } catch (err) {
+    showToast(`Ошибка: ${err.message}`, 4500);
+  }
+};
+
+window.onNativeBridgeReady = initNativeBridge;
+window.onNativePermissionsUpdated = refreshNativeDeviceList;
+if (typeof window.AndroidBluetooth !== 'undefined') {
+  initNativeBridge();
+}
+
 document.getElementById('btn-conn-bluetooth').onclick = async () => {
   try {
     const res = await engine.connectBluetooth();
