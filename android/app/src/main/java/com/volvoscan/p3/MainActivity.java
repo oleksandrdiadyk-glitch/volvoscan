@@ -28,11 +28,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(webView);
 
         WebSettings settings = webView.getSettings();
+        settings.setDefaultTextEncodingName("utf-8");
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
+        settings.setAllowFileAccessFromFileURLs(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         bluetoothBridge = new BluetoothBridge(this, webView);
